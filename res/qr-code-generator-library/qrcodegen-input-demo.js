@@ -31,6 +31,20 @@ var app;
             if (el.id.indexOf("version-") != 0)
                 el.oninput = redrawQrCode;
         }
+        
+        // Add event listener for label input to ask user if they want a label when it's empty
+        const labelInput = getInput("label-input");
+        labelInput.addEventListener("focus", function() {
+            if (!this.value.trim() && !this.hasAttribute("data-prompted")) {
+                const wantLabel = confirm("Would you like to add a label below the QR code?");
+                if (wantLabel) {
+                    // User wants a label, leave field empty for them to type
+                } else {
+                    // User doesn't want a label, mark as prompted so we don't ask again
+                    this.setAttribute("data-prompted", "true");
+                }
+            }
+        });
         elems = document.querySelectorAll("input[type=radio], input[type=checkbox]");
         for (let el of elems)
             el.onchange = redrawQrCode;
@@ -91,7 +105,54 @@ var app;
             svg.querySelector("path").setAttribute("d", pathD);
             svg.querySelector("rect").setAttribute("fill", lightColor);
             svg.querySelector("path").setAttribute("fill", darkColor);
+            
+            // Check if there's a label and add/update it
+            const label = getInput("label-input").value.trim();
+            let textElement = svg.querySelector("text");
+            
+            if (label) {
+                const labelY = qr.size + border * 2 + 2; // Position below QR code
+                
+                // Add/update background rectangle for label area
+                let rectElement = svg.querySelector("rect:nth-of-type(2)"); // First rect is the main background
+                if (!rectElement) {
+                    rectElement = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+                    svg.appendChild(rectElement);
+                }
+                rectElement.setAttribute("x", "0");
+                rectElement.setAttribute("y", String(qr.size + border * 2));
+                rectElement.setAttribute("width", String(qr.size + border * 2));
+                rectElement.setAttribute("height", "5");
+                rectElement.setAttribute("fill", lightColor);
+                
+                // Add/update text element
+                if (!textElement) {
+                    textElement = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                    svg.appendChild(textElement);
+                }
+                
+                textElement.setAttribute("x", (qr.size + border * 2) / 2);
+                textElement.setAttribute("y", labelY);
+                textElement.setAttribute("text-anchor", "middle");
+                textElement.setAttribute("font-family", "Arial, sans-serif");
+                textElement.setAttribute("font-size", "2");
+                textElement.setAttribute("fill", darkColor);
+                textElement.textContent = label;
+            } else {
+                // Remove the text element and background rect if no label is provided
+                if (textElement) {
+                    svg.removeChild(textElement);
+                }
+                
+                // Remove the background rectangle if it exists
+                let rectElement = svg.querySelector("rect:nth-of-type(2)");
+                if (rectElement) {
+                    svg.removeChild(rectElement);
+                }
+            }
+            
             svg.style.removeProperty("display");
+            // Use the updated SVG code with label for download
             download.href = "data:application/svg+xml," + encodeURIComponent(code);
         }
         // Returns a string to describe the given list of segments.
@@ -141,14 +202,33 @@ var app;
         if (scale <= 0 || border < 0)
             throw new RangeError("Value out of range");
         const width = (qr.size + border * 2) * scale;
+        const label = getInput("label-input").value.trim();
+        const labelHeight = label ? scale * 3 : 0; // Height for label text if provided
+        
         canvas.width = width;
-        canvas.height = width;
+        canvas.height = width + labelHeight;
         let ctx = canvas.getContext("2d");
+        
+        // Draw QR Code
         for (let y = -border; y < qr.size + border; y++) {
             for (let x = -border; x < qr.size + border; x++) {
                 ctx.fillStyle = qr.getModule(x, y) ? darkColor : lightColor;
                 ctx.fillRect((x + border) * scale, (y + border) * scale, scale, scale);
             }
+        }
+        
+        // Draw label background and text if provided
+        if (label) {
+            // Draw background for label area
+            ctx.fillStyle = lightColor;
+            ctx.fillRect(0, width, width, labelHeight);
+            
+            // Draw label text
+            ctx.fillStyle = darkColor;
+            ctx.font = `${scale * 1.5}px Arial, sans-serif`;
+            ctx.textAlign = "center";
+            ctx.textBaseline = "top";
+            ctx.fillText(label, width / 2, width + 5);
         }
     }
     // Returns a string of SVG code for an image depicting the given QR Code, with the given number
@@ -163,12 +243,27 @@ var app;
                     parts.push(`M${x + border},${y + border}h1v1h-1z`);
             }
         }
+        
+        // Get label text if any
+        const label = getInput("label-input").value.trim();
+        let labelElement = "";
+        let svgHeight = qr.size + border * 2;
+        
+        // If label exists, add it and increase SVG height
+        if (label) {
+            const labelY = qr.size + border * 2 + 2; // Position below QR code
+            svgHeight += 5; // Add space for label
+            // Add a background rectangle for the label area to prevent checkerboard pattern
+            labelElement = `\t<rect x="0" y="${qr.size + border * 2}" width="${qr.size + border * 2}" height="5" fill="${lightColor}"/>
+\t<text x="${(qr.size + border * 2) / 2}" y="${labelY}" text-anchor="middle" font-family="Arial, sans-serif" font-size="2" fill="${darkColor}">${label}</text>\n`;
+        }
+        
         return `<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 ${qr.size + border * 2} ${qr.size + border * 2}" stroke="none">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 ${qr.size + border * 2} ${svgHeight}" stroke="none">
 	<rect width="100%" height="100%" fill="${lightColor}"/>
 	<path d="${parts.join(" ")}" fill="${darkColor}"/>
-</svg>
+${labelElement}</svg>
 `;
     }
     function handleVersionMinMax(which) {
