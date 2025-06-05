@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" style="background-color: white;">
 <head>
 	<meta charset="UTF-8"/>
 	<title>QR Code Generator - Live Demo</title>
@@ -42,6 +42,13 @@ article form table td:first-child {
 }
 
 /* Custom styles for optimized version */
+body {
+  background-color: white;
+  width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+}
 article {
   max-width: 60em;
   margin: 0 auto;
@@ -54,8 +61,14 @@ article section#contents {
   background-color: #F8F8F8;
   border-radius: 0.5em;
 }
+div.vert-main {
+  background-color: white;
+  width: 100%;
+  border: none;
+}
 div.horz-main {
   padding: 0 2em !important;
+  background-color: white;
 }
 .last-modified {
   position: absolute;
@@ -73,8 +86,8 @@ div.horz-main {
 </style>
 </head>
 
-<body>
-	<hr/>
+<body style="background-color: white;">
+	<hr style="border: none; border-top: 1px solid #ccc; margin: 0; padding: 0;"/>
 
 <div class="vert-main">
 <div class="horz-main">
@@ -251,7 +264,8 @@ Online Javadoc documentation: <a href="res/qr-code-generator-library/javadoc/ind
 </div>
 </div>
 
-<footer>
+<hr style="border: none; border-top: 1px solid #ccc; margin: 0; padding: 0;"/>
+<footer style="background-color: white;">
 	<p>Content from <a href="https://www.nayuki.io/page/qr-code-generator-library">Project Nayuki</a> - Copyright © Project Nayuki</p>
 </footer>
 </body>
