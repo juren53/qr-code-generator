@@ -1,0 +1,28 @@
+# GitHub Push Instructions
+
+After creating your repository on GitHub, run these commands in your terminal (replace YOUR_USERNAME with your actual GitHub username):
+
+```bash
+# Navigate to your local repository directory
+cd /home/juren/Projects/GitHub/qr-code-generator
+
+# Add the remote repository
+git remote add origin https://github.com/YOUR_USERNAME/qr-code-generator.git
+
+# Push your code to GitHub
+git push -u origin master
+```
+
+# Setting up GitHub Pages
+
+1. Go to your repository on GitHub
+2. Click on "Settings"
+3. Scroll down to the "GitHub Pages" section
+4. Under "Source", select "master branch"
+5. Click "Save"
+
+After a few minutes, your site will be published at:
+https://YOUR_USERNAME.github.io/qr-code-generator/
+
+That's it! Now you can access your QR code generator from anywhere with internet access.
+
