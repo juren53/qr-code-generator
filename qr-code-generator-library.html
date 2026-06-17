@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta charset="UTF-8"/>
+	<title>QR Code Generator - Live Demo</title>
+	<meta http-equiv="Content-Style-Type" content="text/css"/>
+	<meta http-equiv="Content-Script-Type" content="application/javascript"/>
+	<meta name="viewport" content="width=device-width,initial-scale=1"/>
+	<link rel="stylesheet" href="res/style/style.css" type="text/css"/>
+	<link rel="preload" href="res/style/avenir-lt-std-roman.otf" as="font" type="font/otf" crossorigin="crossorigin"/>
+<style type="text/css">
+article section#contents li ul {
+	margin-top: 0em;
+	margin-bottom: 0em;
+	font-size: 80%;
+}
+article section#contents li li {
+	margin-top: 0.2em;
+	margin-bottom: 0.2em;
+}
+@media (min-width: 55em) {
+	article section#contents {
+		float: right;
+		margin-left: 2.0em;
+	}
+	article section#contents h2 {
+		margin-top: 0em;
+	}
+}
+article label + label {
+	margin-left: 0.8em;
+}
+article label > input[type=radio], article label > input[type=checkbox] {
+	margin-right: 0.2em;
+}
+article canvas, article svg {
+	padding: 1.0em;
+	background-color: #E8E8E8;
+}
+article form table td:first-child {
+	white-space: pre;
+}
+
+/* Custom styles for optimized version */
+article {
+  max-width: 60em;
+  margin: 0 auto;
+}
+article section#contents {
+  float: none;
+  margin: 0 0 2em 0;
+  border: 1px solid #E0E0E0;
+  padding: 1em;
+  background-color: #F8F8F8;
+  border-radius: 0.5em;
+}
+div.horz-main {
+  padding: 0 2em !important;
+}
+</style>
+</head>
+
+<body>
+	<hr/>
+
+<div class="vert-main">
+<div class="horz-main">
+<article>
+<h1><img src="res/page-icon/64/qr-code-generator-library.png"/> QR Code Generator Library</h1>
+
+<h2 id="live-demo-javascript" style="clear:right">Live demo (JavaScript)</h2>
+<p>You can generate QR Code symbols conveniently on this web page, powered by the TypeScript port of this library.</p>
+<form onsubmit="event.preventDefault();">
+	<div id="loading"></div>
+	<div id="loaded"></div>
+	<table class="layout" style="width:100%">
+		<tbody>
+			<tr>
+				<td><label for="text-input"><strong>Text string:</strong></label></td>
+				<td style="width:100%"><textarea placeholder="Enter your text to be put into the QR Code" id="text-input" style="width:100%; max-width:30em; height:5em; font-family:inherit"></textarea></td>
+			</tr>
+			<tr>
+				<td><strong>QR Code:</strong><br/><a id="download">(download)</a></td>
+				<td>
+					<canvas id="qrcode-canvas" hidden="hidden"></canvas>
+					<svg xmlns="http://www.w3.org/2000/svg" id="qrcode-svg" style="width:30em; height:30em; display:none" stroke="none">
+						<rect width="100%" height="100%" fill="#FFFFFF"/>
+						<path d="" fill="#000000"/>
+					</svg>
+				</td>
+			</tr>
+			<tr>
+				<td><strong>Error correction:</strong></td>
+				<td>
+					<label><input type="radio" name="errcorlvl" id="errcorlvl-low" checked="checked"/>Low</label>
+					<label><input type="radio" name="errcorlvl" id="errcorlvl-medium"/>Medium</label>
+					<label><input type="radio" name="errcorlvl" id="errcorlvl-quartile"/>Quartile</label>
+					<label><input type="radio" name="errcorlvl" id="errcorlvl-high"/>High</label>
+				</td>
+			</tr>
+			<tr>
+				<td>Output format:</td>
+				<td>
+					<label><input type="radio" name="output-format" id="output-format-bitmap" checked="checked"/>Bitmap</label>
+					<label><input type="radio" name="output-format" id="output-format-vector"/>Vector</label>
+				</td>
+			</tr>
+			<tr>
+				<td><label for="border-input">Border:</label></td>
+				<td><input type="number" min="0" max="100" step="1" value="4" id="border-input" style="width:4em"/> modules</td>
+			</tr>
+			<tr id="scale-row">
+				<td><label for="scale-input">Scale:</label></td>
+				<td><input type="number" min="1" max="30" step="1" value="8" id="scale-input" style="width:4em"/> pixels per module</td>
+			</tr>
+			<tr>
+				<td>Colors:</td>
+				<td>
+					Light = <input type="text" value="#FFFFFF" id="light-color-input" style="width:6em"/>,
+					dark = <input type="text" value="#000000" id="dark-color-input" style="width:6em"/>
+				</td>
+			</tr>
+			<tr>
+				<td>Version range:</td>
+				<td>
+					Minimum = <input type="number" min="1" max="40" step="1" value="1"  id="version-min-input" style="width:4em" oninput="app.handleVersionMinMax('min');"/>,
+					maximum = <input type="number" min="1" max="40" step="1" value="40" id="version-max-input" style="width:4em" oninput="app.handleVersionMinMax('max');"/>
+				</td>
+			</tr>
+			<tr>
+				<td><label for="mask-input">Mask pattern:</label></td>
+				<td><input type="number" min="-1" max="7" step="1" value="-1" id="mask-input" style="width:4em"/> (−1 for automatic, 0 to 7 for manual)</td>
+			</tr>
+			<tr>
+				<td>Boost ECC:</td>
+				<td><label><input type="checkbox" checked="checked" id="boost-ecc-input"/>Increase <abbr title="error correction code">ECC</abbr> level within same version</label></td>
+			</tr>
+			<tr>
+				<td>Statistics:</td>
+				<td id="statistics-output" style="white-space:pre"></td>
+			</tr>
+		</tbody>
+	</table>
+</form>
+<script src="res/qr-code-generator-library/qrcodegen.js" defer="defer"></script>
+<script src="res/qr-code-generator-library/qrcodegen-input-demo.js" defer="defer"></script>
+
+<h2 id="introduction">Introduction</h2>
+
+<section id="contents">
+	<h2>Contents</h2>
+	<ul>
+		<li><a href="#live-demo-javascript">Live demo (JavaScript)</a></li>
+		<li><a href="#introduction">Introduction</a></li>
+		<li><a href="#features">Features</a></li>
+		<li><a href="#source-code">Source code</a>
+			<ul>
+				<li><a href="#java">Java</a></li>
+				<li><a href="#java-fast">Java, fast</a></li>
+				<li><a href="#typescript">TypeScript</a></li>
+				<li><a href="#javascript">JavaScript</a></li>
+				<li><a href="#python">Python</a></li>
+				<li><a href="#rust">Rust</a></li>
+				<li><a href="#rust-no-heap">Rust, no heap</a></li>
+				<li><a href="#cpp">C++</a></li>
+				<li><a href="#c">C</a></li>
+				<li><a href="#third-party-ports">Third-party ports</a></li>
+			</ul>
+		</li>
+		<li><a href="#qr-code-technology-overview">QR Code technology overview</a>
+			<ul>
+				<li><a href="#terminology">Terminology</a></li>
+				<li><a href="#generation-procedure">Generation procedure</a></li>
+			</ul>
+		</li>
+		<li><a href="#compared-to-competitors">Compared to competitors</a></li>
+		<li><a href="#more-info">More info</a></li>
+	</ul>
+</section>
+
+<p>This project aims to be the best, clearest library for generating <abbr title="Quick Response">QR</abbr> Codes. My primary goals are flexible options and absolute correctness. Secondary goals are compact implementation size and good documentation comments.</p>
+<p>This work is an independent implementation based on reading the official <abbr title="International Organization for Standardization">ISO</abbr> specification documents. I believe that my library has a more intuitive <abbr title="application programming interface">API</abbr> and shorter code length than competing libraries out there. The library is designed first in Java and then ported to TypeScript, Python, Rust, C++, and C. It is open source under the MIT License. For each language, the codebase is roughly 1000 lines of code and has no dependencies other than the respective language's standard library.</p>
+
+<h2 id="features">Features</h2>
+<p>Core features:</p>
+<ul>
+	<li><p>Available in 6 programming languages, all with nearly equal functionality: <a href="#java">Java</a>, <a href="#java-fast">Java (fast)</a>, <a href="#typescript">TypeScript</a>/<wbr/><a href="#javascript">JavaScript</a>, <a href="#python">Python</a>, <a href="#rust">Rust</a>, <a href="#rust-no-heap">Rust (no heap)</a>, <a href="#cpp">C++</a>, <a href="#c">C</a></p></li>
+	<li><p>Significantly shorter code but more documentation comments compared to competing libraries (a competitive analysis is provided near the bottom of this page)</p></li>
+	<li><p>Supports encoding all 40 versions (sizes) and all 4 error correction levels, as per the QR Code Model 2 standard</p></li>
+	<li><p>Output format: Raw modules/<wbr/>pixels of the QR symbol</p></li>
+	<li><p>Detects finder-like penalty patterns more accurately than other implementations</p></li>
+	<li><p>Encodes numeric and special-alphanumeric text in less space than general text</p></li>
+	<li><p>Open-source code under the permissive MIT License</p></li>
+</ul>
+<p>Manual parameters:</p>
+<ul>
+	<li><p>User can specify minimum and maximum version numbers allowed, then library will automatically choose smallest version in the range that fits the data</p></li>
+	<li><p>User can specify mask pattern manually, otherwise library will automatically evaluate all 8 masks and select the optimal one</p></li>
+	<li><p>User can specify absolute error correction level, or allow the library to boost it if it doesn't increase the version number</p></li>
+	<li><p>User can create a list of data segments manually and add <abbr title="Extended Channel Interpretation">ECI</abbr> segments</p></li>
+</ul>
+<p>Optional advanced features (Java only):</p>
+<ul>
+	<li><p>Encodes Japanese Unicode text in kanji mode to save a lot of space compared to UTF-8 bytes</p></li>
+	<li><p>Computes <a href="https://www.nayuki.io/page/optimal-text-segmentation-for-qr-codes">optimal segment mode switching</a> for text with mixed numeric/<wbr/>alphanumeric/<wbr/>general/<wbr/>kanji parts</p></li>
+</ul>
+
+<h2 id="source-code">Source code <img src="res/common/download-icon.svg" alt="" style="width:1.5em; vertical-align:middle"/></h2>
+<p>This library is designed with essentially the same API structure and naming in multiple languages for your convenience: Java, TypeScript, Python, Rust, C++, C. Each language port is pure and doesn't use foreign function calls. Regardless of the language used, the generated results are guaranteed to be identical because the algorithms are translated faithfully.</p>
+<p>For my own convenience when designing and testing the code, the Java language port of the QR Code generator library is considered to be the master reference implementation. The TypeScript, Python, Rust, and C++ ports are translated from the Java codebase, with a balance between writing idiomatic code in the target language but also not deviating too much from the Java code's design. When in doubt, please consult the Java code to read the more extensive documentation comments and to check what types and values are considered legal.</p>
+<p>Git repositories:<br/>
+<ul>
+	<li>Primary: <a href="https://github.com/nayuki/QR-Code-generator">https://github.com/nayuki/QR-Code-generator <img src="res/common/github-icon.svg" alt="" style="width:1.3em; vertical-align:middle"/></a></p>
+	<li>Mirror: <a href="https://gitlab.com/Nayuki/QR-Code-generator">https://gitlab.com/Nayuki/QR-Code-generator <img src="res/common/gitlab-icon.svg" alt="" style="width:1.3em; vertical-align:middle"/></a></p>
+</ul>
+
+<h3 id="java"><a href="https://github.com/nayuki/QR-Code-generator/tree/master/java/src/main/java/io/nayuki/qrcodegen">Java</a> language (<abbr title="Standard Edition">SE</abbr> 7 and above)</h3>
+<p>The library: <a href="https://github.com/nayuki/QR-Code-generator/blob/master/java/src/main/java/io/nayuki/qrcodegen/QrCode.java?ts=4">QrCode.java</a>, <a href="https://github.com/nayuki/QR-Code-generator/blob/master/java/src/main/java/io/nayuki/qrcodegen/QrSegment.java?ts=4">QrSegment.java</a>, <a href="https://github.com/nayuki/QR-Code-generator/blob/master/java/src/main/java/io/nayuki/qrcodegen/BitBuffer.java?ts=4">BitBuffer.java</a><br/>
+Optional advanced logic (SE 8+): <a href="https://github.com/nayuki/QR-Code-generator/blob/master/java/src/main/java/io/nayuki/qrcodegen/QrSegmentAdvanced.java?ts=4">QrSegmentAdvanced.java</a><br/>
+Runnable demo program: <a href="https://github.com/nayuki/QR-Code-generator/blob/master/java/QrCodeGeneratorDemo.java?ts=4">QrCodeGeneratorDemo.java</a></p>
+<p>Available as a package on Maven Central: <a href="https://central.sonatype.com/artifact/io.nayuki/qrcodegen">io.nayuki:qrcodegen</a><br/>
+Online Javadoc documentation: <a href="res/qr-code-generator-library/javadoc/index.html">io.nayuki.qrcodegen</a></p>
+
+<h2 id="more-info">More info</h2>
+<ul>
+	<li><a href="https://en.wikipedia.org/wiki/QR_code">Wikipedia: QR code</a></li>
+	<li><a href="https://www.qrcode.com/en/">QRcode.com by Denso Wave</a></li>
+	<li><a href="https://web.archive.org/web/20140630004133/https://www.codeplex.com/Download?ProjectName=qrcodenet&DownloadId=321409">ISO/IEC 18004:2006 – QR Code 2005 bar code symbology specification</a> (recommended)</li>
+	<li><a href="https://web.archive.org/web/20140630152807/http://www.codeplex.com/Download?ProjectName=qrcodenet&DownloadId=284291">ISO/IEC 18004:2000 – Bar code symbology – QR Code</a> (old standard)</li>
+	<li><a href="https://www.thonky.com/qr-code-tutorial/">Thonky.com: QR Code Tutorial</a></li>
+</ul>
+</article>
+</div>
+</div>
+
+<footer>
+	<p>Content from <a href="https://www.nayuki.io/page/qr-code-generator-library">Project Nayuki</a> - Copyright © Project Nayuki</p>
+</footer>
+</body>
+</html>
