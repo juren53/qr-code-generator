@@ -16,8 +16,8 @@ The Internet Archive (archive.org) is free and open source, and is already used 
 
 Two test QR codes were generated and linked to placeholder records uploaded to the Internet Archive:
 
-- **Ship's bell** — `QR_ships-bell.png`
-- **Bridge clock** — `QR_bridge-clock.png`
+- **Steamboat bell** — `QR_steamboat-bell.png`
+- **Steamboat clock** — `QR_steamboat-clock.png`
 
 An existing example of this approach in action is the [Truman Home music collection](https://archive.org/details/trumanhomemusic) on the Internet Archive — a small portion of Harry Truman's record collection, publicly browsable. Someone stumbling across one piece like that online could be compelled to visit the physical Museum to see what else is there.
 
