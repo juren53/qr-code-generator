@@ -1,6 +1,6 @@
-# MCIS QR Code Module
+# QR Code Module
 
-A standalone MCIS module that generates QR codes for Museum artifacts, allowing visitors to scan a code displayed beside a physical object and be taken directly to that artifact's record online.
+A standalone module that generates QR codes for Museum artifacts, allowing visitors to scan a code displayed beside a physical object and be taken directly to that artifact's record online.
 
 ---
 
