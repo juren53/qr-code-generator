@@ -6,7 +6,7 @@ A standalone module that generates QR codes for Museum artifacts, allowing visit
 
 ## Origin
 
-The idea came from Shelly Franklin at WHM (Whitehead Home Museum): add QR codes to artifacts currently on display with no information label. A visitor scans the code with their phone camera — no app required — and a link appears taking them to an image and description of the artifact on the Internet Archive.
+A visitor scans the code with their phone camera — no app required — and a link appears taking them to an image and description of the artifact on the Internet Archive.
 
 The Internet Archive (archive.org) is free and open source, and is already used by many museums worldwide. It serves as the initial backend target for artifact records.
 
