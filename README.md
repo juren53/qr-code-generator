@@ -47,7 +47,7 @@ Key trade-offs identified so far:
 
 ### Backend
 
-- Is the Internet Archive the right data store to serve WHM artifact data to the public?
+- Is the Internet Archive the right data store to serve your museum artifact data to the public?
 - How should backend artifact data be structured?
 
 ### Artifact Numbering
