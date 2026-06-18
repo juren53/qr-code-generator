@@ -23,8 +23,6 @@ Two test QR codes were generated and linked to placeholder records uploaded to t
 | :---: | :---: |
 | ![QR code for steamboat bell](QR_steamboat-bell.png) | ![QR code for steamboat clock](QR_steamboat-clock.png) |
 
-An existing example of this approach in action is the [Truman Home music collection](https://archive.org/details/trumanhomemusic) on the Internet Archive — a small portion of Harry Truman's record collection, publicly browsable. Someone stumbling across one piece like that online could be compelled to visit the physical Museum to see what else is there.
-
 **Initial reaction:** The technology has matured to the point where implementation at WHM is very doable with relatively little friction.
 
 ---
