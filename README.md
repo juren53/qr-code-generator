@@ -52,11 +52,11 @@ Key trade-offs identified so far:
 
 ### Artifact Numbering
 
-- How do we implement a WHM-specific artifact numbering system?
+- What artifact numbering system can be used?
 
 ### Physical Display
 
-- How do we unobtrusively display QR codes in the Museum?
+- How can QR codes be unobtrusively displayed in a museum?
 - What is the best display method?
 - What is the ideal size for visibility and scannability?
 
