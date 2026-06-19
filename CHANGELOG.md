@@ -9,6 +9,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 > Correct format: `## QRG [X.Y.Z] - YYYY-MM-DD HHMM CDT`
 > Example: `## QRG [0.1.0] - 2026-06-19 0352 CDT`
 
+## QRG [0.2.2] - 2026-06-19 1131 CDT
+
+### Changed
+
+- **ThemeManager module integration** — replaced the self-contained `theme.py` palette/stylesheet system with the shared ThemeManager module (v2.0), following the same pattern as the earlier Icon Manager Module migration
+  - Gains 6 themes (Dark, Light, Solarized Light, Solarized Dark, Dracula, GitHub) vs the previous 4; theme selection now persists across sessions via `QSettings`
+  - `apply_theme()` switches from CSS `setStyleSheet()` to `QPalette`-based `setPalette(get_fusion_palette(...))` for proper Fusion style integration
+  - `on_select_theme()` displays proper theme display names and maps them back to internal registry keys
+  - `on_toggle_dark_mode()` targets `"light"` / `"dark"` internal keys; `_DARK_THEMES` set (`dark`, `solarized_dark`, `dracula`) drives the `is_dark_theme()` helper
+  - `MainWindow` loads the persisted theme from `QSettings` on startup, validated against the registry; falls back to `"light"` if the stored key is stale or unrecognized
+  - `os.path.expanduser()` detects the ThemeManager path at `~/Projects/ThemeManager/`; self-contained fallback if the module is unavailable is not provided — ThemeManager is a required dependency
+  - **Files Modified**: `code/src/qr_gui/theme.py`, `code/src/qr_gui/view.py`, `code/src/qr_gui/main.py`, `code/src/qr_gui/menu.py`
+
+---
+
 ## QRG [0.2.1] - 2026-06-19 0902 CDT
 
 ### Fixed
