@@ -45,7 +45,7 @@ Key trade-offs identified so far:
 
 ## Creating and Implementing QR Codes for Your Museum
 
-1. **Create landing pages** for each exhibit or artifact that contains detailed information, images, videos, or interactive content.
+1. **Publish an item to the Internet Archive.**
 
 2. **Generate unique QR codes** for each URL using a QR code generator.
 
