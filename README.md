@@ -73,3 +73,7 @@ Key trade-offs identified so far:
 ## Status
 
 Prototype complete. Lots to talk about and plan before full implementation — it is very doable.
+
+---
+
+*Last updated: 2026-06-18-2350*
