@@ -3,12 +3,19 @@
 # view.py
 #
 # ViewMixin: zoom controls for the QR preview plus theme selection and a
-# dark-mode toggle, driven by the local ThemeManager.
+# dark-mode toggle, driven by the ThemeManager module.
 # -----------------------------------------------------------------------------
 
+from PyQt6.QtCore import QSettings
 from PyQt6.QtWidgets import QApplication, QInputDialog
 
-from .theme import DEFAULT_THEME
+from .theme import (
+    DEFAULT_THEME,
+    canvas_color,
+    get_fusion_palette,
+    get_theme_registry,
+    is_dark_theme,
+)
 
 _MIN_ZOOM = 0.25
 _MAX_ZOOM = 8.0
@@ -42,33 +49,35 @@ class ViewMixin:
 
     # ── Theming ───────────────────────────────────────────────────────────
     def on_select_theme(self):
-        names = self.theme_manager.get_theme_names()
-        current_index = names.index(self.current_theme) if self.current_theme in names else 0
+        registry = get_theme_registry()
+        themes = [
+            (registry.get_theme(n).display_name, n)
+            for n in registry.get_theme_names()
+            if registry.get_theme(n) is not None
+        ]
+        display_names = [d for d, _ in themes]
+        current_display = next(
+            (d for d, k in themes if k == self.current_theme), display_names[0]
+        )
         name, ok = QInputDialog.getItem(
-            self, "Select Theme", "Theme:", names, current_index, editable=False
+            self, "Select Theme", "Theme:", display_names,
+            display_names.index(current_display), editable=False,
         )
         if ok and name:
-            self.current_theme = name
+            self.current_theme = next(k for d, k in themes if d == name)
             self.apply_theme()
             self.set_status(f"Applied {name} theme.")
 
     def on_toggle_dark_mode(self):
-        if self.theme_manager.is_dark_theme(self.current_theme):
-            self.current_theme = DEFAULT_THEME
-        else:
-            self.current_theme = "Dark"
+        self.current_theme = DEFAULT_THEME if is_dark_theme(self.current_theme) else "dark"
         self.apply_theme()
         self.set_status(f"Applied {self.current_theme} theme.")
 
     def apply_theme(self):
-        QApplication.instance().setStyleSheet(
-            self.theme_manager.generate_stylesheet(self.current_theme)
-        )
-        # Keep the preview backdrop in step with the theme.
+        QApplication.instance().setPalette(get_fusion_palette(self.current_theme))
         self.scroll_area.setStyleSheet(
-            f"QScrollArea {{ background-color: {self.theme_manager.canvas_color(self.current_theme)}; }}"
+            f"QScrollArea {{ background-color: {canvas_color(self.current_theme)}; }}"
         )
         if hasattr(self, "dark_mode_action"):
-            self.dark_mode_action.setChecked(
-                self.theme_manager.is_dark_theme(self.current_theme)
-            )
+            self.dark_mode_action.setChecked(is_dark_theme(self.current_theme))
+        QSettings().setValue("theme/current", self.current_theme)

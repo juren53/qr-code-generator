@@ -16,7 +16,7 @@ import os
 import pathlib
 import sys
 
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt, QSettings
 from PyQt6.QtGui import QIcon
 from PyQt6.QtWidgets import (
     QApplication,
@@ -37,7 +37,7 @@ from .file_ops import FileOpsMixin
 from .help import HelpMixin
 from .menu import MenuMixin
 from .printing import PrintMixin
-from .theme import DEFAULT_THEME, ThemeManager
+from .theme import DEFAULT_THEME, get_theme_registry
 from .view import ViewMixin
 
 _PLACEHOLDER = "No QR code yet — enter a URL or text and press Generate (Ctrl+G)."
@@ -70,9 +70,8 @@ class MainWindow(MenuMixin, FileOpsMixin, ViewMixin, PrintMixin, HelpMixin, QMai
         super().__init__()
 
         # State
-        self.theme_manager = ThemeManager()
-        self.current_theme = DEFAULT_THEME
-        self.theme_manager.current_theme = self.current_theme
+        saved = QSettings().value("theme/current", DEFAULT_THEME)
+        self.current_theme = saved if get_theme_registry().get_theme(saved) else DEFAULT_THEME
         self.current_image = None          # PIL.Image of the rendered QR
         self.base_pixmap = None            # full-resolution QPixmap
         self.zoom_factor = 1.0

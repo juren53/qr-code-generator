@@ -9,6 +9,8 @@
 
 from PyQt6.QtGui import QAction, QKeySequence
 
+from .theme import is_dark_theme
+
 
 class MenuMixin:
     def create_menu_bar(self):
@@ -112,7 +114,7 @@ class MenuMixin:
         self.dark_mode_action = QAction("Toggle &Dark Mode", self)
         self.dark_mode_action.setShortcut("Ctrl+D")
         self.dark_mode_action.setCheckable(True)
-        self.dark_mode_action.setChecked(self.theme_manager.is_dark_theme(self.current_theme))
+        self.dark_mode_action.setChecked(is_dark_theme(self.current_theme))
         self.dark_mode_action.triggered.connect(self.on_toggle_dark_mode)
         view_menu.addAction(self.dark_mode_action)
 
