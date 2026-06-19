@@ -78,10 +78,39 @@ Key trade-offs identified so far:
 
 ---
 
+## Usage
+
+The command-line generator lives at `code/generate_qr.py`. It prompts for a URL and an output filename, then writes a PNG with the URL and filename captioned below the QR code.
+
+**Requirements:** Python 3 with the `qrcode` and `Pillow` libraries:
+
+```bash
+pip install qrcode Pillow
+```
+
+**Run it:**
+
+```bash
+cd code
+./generate_qr.py
+```
+
+You'll be prompted for the two values:
+
+```
+Enter the URL to encode: https://example.com
+Enter the output filename [qrcode_example.png]: demo.png
+Saved QR code to demo.png
+```
+
+If you omit the filename, it defaults to `qrcode_example.png`; a `.png` extension is appended automatically when missing.
+
+---
+
 ## Status
 
 Prototype complete. A command-line QR code generator, `code/generate_qr.py`, is now available — it prompts for a URL and output filename and writes a PNG with the URL and filename captioned below the code. Lots to talk about and plan before full implementation — it is very doable.
 
 ---
 
-*Last updated: 2026-06-19-0356*
+*Last updated: 2026-06-19-0358*
