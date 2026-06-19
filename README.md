@@ -47,7 +47,7 @@ Key trade-offs identified so far:
 
 1. **Publish an item to the Internet Archive.**
 
-2. **Generate unique QR codes** for each URL using a QR code generator.
+2. **Generate a QR Code** for the item published in the Internet Archive.
 
 3. **Design and place signage** near each display that includes the QR code and a brief instruction.
 
