@@ -9,7 +9,7 @@
 # The actual rendering lives in src/qr_gui/qr_core.py, shared with the PyQt6
 # GUI front-end (qr_code_gui.py).
 #
-# Version : 0.2.0
+# Version : 0.2.1
 # Created : 2026-06-19 03:47:36 CDT
 # -----------------------------------------------------------------------------
 
