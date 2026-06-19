@@ -36,6 +36,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Fix: renamed the file so the library resolves correctly
   - **Files Modified**: `code/qrcode.py` → `code/generate_qr.py`
 
+### Documentation
+
+- **README Usage section** — added a Usage section documenting requirements (`qrcode`, `Pillow`) and how to run `code/generate_qr.py`, including a sample interactive session
+  - **Files Modified**: `README.md`
+
+- **README Status update** — noted that the command-line generator is now available
+  - **Files Modified**: `README.md`
+
 ---
 
 ## QRG [0.0.2] - 2026-06-18 2351 CDT
