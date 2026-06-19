@@ -10,6 +10,14 @@ In a museum context, QR codes act as a bridge between a physical artifact on dis
 
 ---
 
+## Example in the Wild
+
+The Norton Simon Museum uses this same approach on its exhibit labels. Here a small QR code (marked "READ") sits at the bottom of the label beside Brancusi's *Bird in Space*, letting visitors scan to read the full story behind the sculpture's reinstallation.
+
+<img src="code/PHOTO_QR-code-at-Norton-Simon.jpg" width="500">
+
+---
+
 ## Prototype
 
 Two test QR codes were generated and linked to placeholder records uploaded to the Internet Archive:
@@ -76,4 +84,4 @@ Prototype complete. Lots to talk about and plan before full implementation — i
 
 ---
 
-*Last updated: 2026-06-18-2350*
+*Last updated: 2026-06-19-0009*
