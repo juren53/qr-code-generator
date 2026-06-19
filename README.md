@@ -49,7 +49,7 @@ Key trade-offs identified so far:
 
 2. **Generate a QR Code** for the item published in the Internet Archive.
 
-3. **Design and place signage** near each display that includes the QR code and a brief instruction.
+3. **Design signage** that includes the QR code and descriptive message.
 
 ---
 
