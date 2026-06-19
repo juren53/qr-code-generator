@@ -6,65 +6,35 @@
 # Prompts for the URL and output filename, then renders the URL and filename
 # as captions below the QR code.
 #
-# Version : 0.1.0
+# The actual rendering lives in src/qr_gui/qr_core.py, shared with the PyQt6
+# GUI front-end (qr_code_gui.py).
+#
+# Version : 0.2.0
 # Created : 2026-06-19 03:47:36 CDT
 # -----------------------------------------------------------------------------
 
-import qrcode
-from PIL import Image, ImageDraw, ImageFont
+import os
+import sys
 
-# Prompt the user for the URL to encode
-url = input("Enter the URL to encode: ").strip()
+# Make the src/ directory importable so the shared qr_core helper can be found.
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "src"))
 
-# Prompt the user for the output filename
-filename = input("Enter the output filename [qrcode_example.png]: ").strip()
-if not filename:
-    filename = "qrcode_example.png"
-if not filename.lower().endswith(".png"):
-    filename += ".png"
-
-# Create the QR code object
-qr = qrcode.QRCode(version=1, box_size=10, border=4)
-qr.add_data(url)
-qr.make(fit=True)
-
-# Create the QR code image
-qr_img = qr.make_image(fill_color="black", back_color="white").convert("RGB")
-
-# Build a taller canvas with room for the URL and filename captions below the QR code
-caption_lines = [url, filename]
-try:
-    font = ImageFont.truetype("DejaVuSans.ttf", 20)
-except OSError:
-    font = ImageFont.load_default()
-
-measure = ImageDraw.Draw(qr_img)
-line_metrics = []
-for line in caption_lines:
-    bbox = measure.textbbox((0, 0), line, font=font)
-    line_metrics.append((bbox[2] - bbox[0], bbox[3] - bbox[1]))
-
-margin = 15
-line_spacing = 8
-total_text_height = sum(h for _, h in line_metrics) + line_spacing * (len(caption_lines) - 1)
-
-canvas = Image.new(
-    "RGB",
-    (qr_img.width, qr_img.height + total_text_height + 2 * margin),
-    "white",
-)
-canvas.paste(qr_img, (0, 0))
-
-# Draw each caption line centered below the QR code
-draw = ImageDraw.Draw(canvas)
-text_y = qr_img.height + margin
-for line, (text_width, text_height) in zip(caption_lines, line_metrics):
-    text_x = (canvas.width - text_width) // 2
-    draw.text((text_x, text_y), line, fill="black", font=font)
-    text_y += text_height + line_spacing
-
-canvas.save(filename)
-print(f"Saved QR code to {filename}")
+from qr_gui.qr_core import normalize_filename, render_qr
 
 
+def main():
+    # Prompt the user for the URL to encode
+    url = input("Enter the URL to encode: ").strip()
 
+    # Prompt the user for the output filename
+    filename = normalize_filename(input("Enter the output filename [qrcode_example.png]: "))
+
+    # Render the QR code with the URL and filename captioned below it
+    canvas = render_qr(url, caption_lines=[url, filename])
+
+    canvas.save(filename)
+    print(f"Saved QR code to {filename}")
+
+
+if __name__ == "__main__":
+    main()

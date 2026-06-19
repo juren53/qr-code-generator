@@ -80,6 +80,10 @@ Key trade-offs identified so far:
 
 ## Usage
 
+Two front-ends share the same QR-rendering core (`code/src/qr_gui/qr_core.py`): a command-line tool and a PyQt6 GUI.
+
+### Command-line generator
+
 The command-line generator lives at `code/generate_qr.py`. It prompts for a URL and an output filename, then writes a PNG with the URL and filename captioned below the QR code.
 
 **Requirements:** Python 3 with the `qrcode` and `Pillow` libraries:
@@ -105,11 +109,30 @@ Saved QR code to demo.png
 
 If you omit the filename, it defaults to `qrcode_example.png`; a `.png` extension is appended automatically when missing.
 
+### Graphical interface (PyQt6)
+
+A GUI front-end lives at `code/qr_code_gui.py`. Enter a URL or any text, press **Generate**, and the rendered PNG is shown on screen for review. It offers standard **File / Edit / View / Help** menus, saves to PNG, copies to the clipboard, and **prints to any system printer** (with print preview).
+
+**Additional requirement:** PyQt6.
+
+```bash
+pip install PyQt6
+```
+
+**Run it:**
+
+```bash
+cd code
+./qr_code_gui.py
+```
+
+The GUI optionally uses two shared modules when present — [`pyqt-app-info`](https://github.com/juren53/pyqt-app-info) for the About dialog and the Icon Manager Module for the window icon — but falls back gracefully when they are not installed. The command-line tool does not require PyQt6.
+
 ---
 
 ## Status
 
-Prototype complete. A command-line QR code generator, `code/generate_qr.py`, is now available — it prompts for a URL and output filename and writes a PNG with the URL and filename captioned below the code. Lots to talk about and plan before full implementation — it is very doable.
+Prototype complete. Two front-ends are available: a command-line generator (`code/generate_qr.py`) that prompts for a URL and output filename, and a PyQt6 GUI (`code/qr_code_gui.py`) that previews the rendered PNG on screen and prints it to system print services via standard File / Edit / View / Help menus. Both share a common rendering core. Lots to talk about and plan before full implementation — it is very doable.
 
 ---
 

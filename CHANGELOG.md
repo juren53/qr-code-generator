@@ -9,6 +9,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 > Correct format: `## QRG [X.Y.Z] - YYYY-MM-DD HHMM CDT`
 > Example: `## QRG [0.1.0] - 2026-06-19 0352 CDT`
 
+## QRG [0.2.0] - 2026-06-19 0423 CDT
+
+### Added
+
+- **PyQt6 GUI front-end** — `code/qr_code_gui.py` plus the `code/src/qr_gui/` package add a graphical interface alongside the CLI, following the structure used by Tag Writer, Audio Tag Writer, and the HSTL Photo Framework
+  - Composed `MainWindow` built from focused mixins: `MenuMixin`, `FileOpsMixin`, `ViewMixin`, `PrintMixin`, `HelpMixin`
+  - Enter a URL or arbitrary text, press **Generate** (or Enter), and the rendered PNG is displayed on screen for review in a scrollable preview area
+  - Standard **File / Edit / View / Help** pull-down menus with `&`-mnemonics, keyboard shortcuts, and status tips
+    - File: Generate (Ctrl+G), Save As… (Ctrl+Shift+S), Print… (Ctrl+P), Print Preview…, Quit (Ctrl+Q)
+    - Edit: Paste URL from Clipboard (Ctrl+V), Copy QR Image (Ctrl+C), Clear (Ctrl+L)
+    - View: Zoom In/Out/Reset, Fit to Window, Select Theme…, Toggle Dark Mode (Ctrl+D)
+    - Help: README, Changelog, Issue Tracker, About
+  - **Printing to standard system print services** via `QtPrintSupport` — `Print…` (`QPrintDialog`) and `Print Preview…` (`QPrintPreviewDialog`), painting the QR code centered on the page with aspect ratio preserved
+  - Save the result as a PNG (`QFileDialog`) and copy it to the system clipboard
+  - On-screen preview with zoom and fit-to-window, plus a status bar carrying a permanent version label
+  - Shared-module integration with graceful fallback: **pyqt-app-info** for the About dialog (falls back to `QMessageBox`), and the **Icon Manager Module** for the app icon (falls back to a null icon)
+  - Self-contained `ThemeManager` (Default Light, Dark, Solarized Light/Dark) matching the sibling apps' `get_theme_names()` / `generate_stylesheet()` API
+  - **Files Added**: `code/qr_code_gui.py`, `code/src/qr_gui/__init__.py`, `code/src/qr_gui/constants.py`, `code/src/qr_gui/qr_core.py`, `code/src/qr_gui/theme.py`, `code/src/qr_gui/menu.py`, `code/src/qr_gui/file_ops.py`, `code/src/qr_gui/view.py`, `code/src/qr_gui/printing.py`, `code/src/qr_gui/help.py`, `code/src/qr_gui/main.py`
+
+### Changed
+
+- **Shared rendering core** — extracted the QR-rendering logic into `code/src/qr_gui/qr_core.py` (`render_qr()` and `normalize_filename()`), a Qt-free helper now used by both the CLI and the GUI
+  - `code/generate_qr.py` refactored to call `qr_core.render_qr()`; its interactive command-line behavior and captioned-PNG output are unchanged
+  - The CLI remains a fully available, standalone entry point that does not require PyQt6
+  - **Files Modified**: `code/generate_qr.py`
+
 ## QRG [0.1.0] - 2026-06-19 0352 CDT
 
 ### Added
