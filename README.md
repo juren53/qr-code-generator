@@ -19,7 +19,7 @@ Two test QR codes were generated and linked to placeholder records uploaded to t
 
 | Steamboat Bell | Steamboat Clock |
 | :---: | :---: |
-| <img src="codes/QR_steamboat-bell.png" width="250"> | <img src="codes/QR_steamboat-clock.png" width="250"> |
+| <img src="code/QR_steamboat-bell.png" width="250"> | <img src="code/QR_steamboat-clock.png" width="250"> |
 
 **Initial reaction:** The technology has matured to the point where implementation at virtually any size institution is straightforward and easy to implement.
 
