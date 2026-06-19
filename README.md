@@ -4,11 +4,9 @@ A standalone module that generates QR codes for Museum artifacts, allowing visit
 
 ---
 
-## Origin
+## Overview
 
-A visitor scans the code with their phone camera — no app required — and a link appears taking them to an image and description of the artifact on the Internet Archive.
-
-The Internet Archive (archive.org) is free and open source, and is already used by many museums worldwide. It serves as the initial backend target for artifact records.
+In a museum context, QR codes act as a bridge between a physical artifact on display and a richer digital record online. A small printed code is placed beside an object, and a visitor scans it with their phone camera — no app required — to be taken instantly to images, descriptions, historical background, and related materials that wouldn't fit on a physical label. This lets the museum offer deeper, self-guided interpretation without cluttering the exhibit space, update or expand an artifact's information at any time without reprinting signage, and make its collection accessible to visitors in a familiar, low-friction way.
 
 ---
 
