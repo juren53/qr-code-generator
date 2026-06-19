@@ -1,6 +1,6 @@
 # QR Code Module
 
-A standalone module that generates QR codes for Museum artifacts, allowing visitors to scan a code displayed beside a physical object and be taken directly to that artifact's record online.
+A standalone module that generates QR codes linking any physical object to an online record — used here to connect museum artifacts to their digital records, but applicable to any setting where a scannable code should point people to more information.
 
 ---
 
