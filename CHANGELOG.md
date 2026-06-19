@@ -9,6 +9,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 > Correct format: `## QRG [X.Y.Z] - YYYY-MM-DD HHMM CDT`
 > Example: `## QRG [0.1.0] - 2026-06-19 0352 CDT`
 
+## QRG [0.2.1] - 2026-06-19 0902 CDT
+
+### Fixed
+
+- **Windows taskbar showing Python's default icon** — the app icon now appears correctly in the taskbar, Alt-Tab switcher, and all other Windows icon consumers
+  - Root cause: `main.py` used the Icon Manager Module only as a last-resort fallback (after loading the raw `ICON_QR-code-gen.png`), so `_init_win32()` never fired; Windows grouped the process under Python's own AppUserModelID and displayed Python's icon
+  - Fix: IMM is now imported at module level — before `QApplication` is created — so `SetCurrentProcessExplicitAppUserModelID("SynchroSoft.QRG")` runs at startup; `set_taskbar_icon()` is called after `window.show()` to also set the per-window COM property and `WM_SETICON`
+
+### Added
+
+- **`resources/icons/` icon set** — generated from `ICON_QR-code-gen.png` using `generate_icons.py` from the Icon Manager Module
+  - `app.ico` — multi-resolution Windows icon (16 × 16 through 256 × 256)
+  - `app.icns` — macOS icon bundle
+  - `app.png`, `app_16x16.png` through `app_256x256.png` — individual PNGs for Linux and Qt fallback
+  - **Files Added**: `code/resources/icons/app.ico`, `code/resources/icons/app.icns`, `code/resources/icons/app.png`, `code/resources/icons/app_{16,24,32,48,64,128,256}x{N}.png`
+
+### Changed
+
+- **`main.py` icon loading** — replaced the ad-hoc `get_app_icon()` / `_load_imm()` helpers with a module-level `IconLoader` instance pointing at `code/resources/icons/`; `get_app_icon()` is now a one-liner delegation to `_app_icons.app_icon()`
+- **`.gitignore`** — added `!resources/icons/*.png` negation rule so the icon PNGs are tracked despite the top-level `*.png` exclusion that suppresses generated QR output files
+  - **Files Modified**: `code/src/qr_gui/main.py`, `code/.gitignore`
+
+---
+
 ## QRG [0.2.0] - 2026-06-19 0423 CDT
 
 ### Added
