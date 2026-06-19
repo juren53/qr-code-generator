@@ -80,8 +80,8 @@ Key trade-offs identified so far:
 
 ## Status
 
-Prototype complete. Lots to talk about and plan before full implementation — it is very doable.
+Prototype complete. A command-line QR code generator, `code/generate_qr.py`, is now available — it prompts for a URL and output filename and writes a PNG with the URL and filename captioned below the code. Lots to talk about and plan before full implementation — it is very doable.
 
 ---
 
-*Last updated: 2026-06-19-0010*
+*Last updated: 2026-06-19-0356*
