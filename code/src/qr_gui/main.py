@@ -13,6 +13,7 @@
 # -----------------------------------------------------------------------------
 
 import os
+import pathlib
 import sys
 
 from PyQt6.QtCore import Qt
@@ -31,7 +32,7 @@ from PyQt6.QtWidgets import (
     QWidget,
 )
 
-from .constants import APP_NAME, APP_ORGANIZATION, APP_TIMESTAMP, APP_VERSION
+from .constants import APP_NAME, APP_ORGANIZATION, APP_SHORT_NAME, APP_TIMESTAMP, APP_VERSION
 from .file_ops import FileOpsMixin
 from .help import HelpMixin
 from .menu import MenuMixin
@@ -41,39 +42,24 @@ from .view import ViewMixin
 
 _PLACEHOLDER = "No QR code yet — enter a URL or text and press Generate (Ctrl+G)."
 
+# IMM setup at module level so _init_win32() fires before QApplication is created.
+_IMM_PATH = os.path.expanduser("~/Projects/Icon_Manager_Module")
+if os.path.isdir(_IMM_PATH) and _IMM_PATH not in sys.path:
+    sys.path.insert(0, _IMM_PATH)
+
+_app_icons = None
+try:
+    from icon_loader import IconLoader  # side-effect: _init_win32() on Windows
+    _app_icons = IconLoader(
+        base_path=pathlib.Path(__file__).resolve().parents[2] / "resources" / "icons"
+    )
+except Exception:
+    pass
+
 
 def get_app_icon() -> QIcon:
-    """Return the application icon.
-
-    Tries, in order:
-      1. ICON_QR-code-gen.png bundled alongside the launcher (code/ root)
-      2. IMM's IconLoader when importable from the known sibling project path
-      3. A null QIcon as a last resort
-    """
-    # 1. Local bundled icon — two levels up from this file (src/qr_gui/ → code/)
-    local_icon = os.path.join(
-        os.path.dirname(os.path.abspath(__file__)), "..", "..", "ICON_QR-code-gen.png"
-    )
-    local_icon = os.path.normpath(local_icon)
-    if os.path.isfile(local_icon):
-        return QIcon(local_icon)
-
-    # 2. Icon Manager Module
-    try:
-        from icon_loader import icons  # IMM on the path
-        return icons.app_icon()
-    except Exception:
-        pass
-    imm_path = os.path.expanduser("~/Projects/Icon_Manager_Module")
-    if os.path.isdir(imm_path):
-        try:
-            if imm_path not in sys.path:
-                sys.path.insert(0, imm_path)
-            from icon_loader import icons
-            return icons.app_icon()
-        except Exception:
-            pass
-
+    if _app_icons is not None:
+        return _app_icons.app_icon()
     return QIcon()
 
 
@@ -206,6 +192,9 @@ def main():
 
     window = MainWindow()
     window.show()
+
+    if _app_icons is not None:
+        _app_icons.set_taskbar_icon(window, f"{APP_ORGANIZATION}.{APP_SHORT_NAME}")
 
     # Pre-fill from a command-line argument, if provided.
     if len(sys.argv) > 1 and sys.argv[1].strip():
