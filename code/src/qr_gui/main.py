@@ -43,11 +43,22 @@ _PLACEHOLDER = "No QR code yet — enter a URL or text and press Generate (Ctrl+
 
 
 def get_app_icon() -> QIcon:
-    """Return an application icon via the Icon Manager Module, if available.
+    """Return the application icon.
 
-    Wires in IMM's IconLoader when importable (directly or from the known
-    sibling project path) and falls back to a null QIcon otherwise.
+    Tries, in order:
+      1. ICON_QR-code-gen.png bundled alongside the launcher (code/ root)
+      2. IMM's IconLoader when importable from the known sibling project path
+      3. A null QIcon as a last resort
     """
+    # 1. Local bundled icon — two levels up from this file (src/qr_gui/ → code/)
+    local_icon = os.path.join(
+        os.path.dirname(os.path.abspath(__file__)), "..", "..", "ICON_QR-code-gen.png"
+    )
+    local_icon = os.path.normpath(local_icon)
+    if os.path.isfile(local_icon):
+        return QIcon(local_icon)
+
+    # 2. Icon Manager Module
     try:
         from icon_loader import icons  # IMM on the path
         return icons.app_icon()
@@ -62,6 +73,7 @@ def get_app_icon() -> QIcon:
             return icons.app_icon()
         except Exception:
             pass
+
     return QIcon()
 
 
