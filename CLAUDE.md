@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-QR Code Generator is a PyQt6 desktop application for generating QR codes from a URL or any text string. It renders a preview of the QR PNG on screen and supports save, clipboard copy, and print via system print services. An optional caption can be drawn below the code. Current version: v0.2.2.
+QR Code Generator is a PyQt6 desktop application for generating QR codes from a URL or any text string. It renders a preview of the QR PNG on screen and supports save, clipboard copy, and print via system print services. An optional caption prints a short label centered below the code at full font size and the URL below that in a smaller font. Print output can be scaled 10–100% of the page. Current version: v0.2.4.
 
 A standalone CLI tool (`code/generate_qr.py`) and a legacy web-based version (`code/qr-code-generator-library.html`) also live in the repo.
 
@@ -59,14 +59,23 @@ constants → qr_core → theme → mixins (menu, file_ops, view, printing, help
 | Module | Purpose |
 |--------|---------|
 | `constants.py` | APP_NAME, APP_VERSION, APP_TIMESTAMP, GITHUB_REPO |
-| `qr_core.py` | Qt-free QR rendering — PIL image with optional caption; shared by GUI and CLI |
+| `qr_core.py` | Qt-free QR rendering — PIL image with optional caption; first caption line uses `font_size` (20pt), subsequent lines use `secondary_font_size` (14pt); shared by GUI and CLI |
 | `theme.py` | ThemeManager integration |
 | `menu.py` | MenuMixin — menu bar and actions |
-| `file_ops.py` | FileOpsMixin — save PNG, copy to clipboard |
+| `file_ops.py` | FileOpsMixin — QR generation, save PNG, copy to clipboard; builds caption from optional label + URL |
 | `view.py` | ViewMixin — zoom, fit-to-window, scroll area |
-| `printing.py` | PrintMixin — system print dialog and print preview |
+| `printing.py` | PrintMixin — system print dialog and print preview; respects `print_scale_spin` for scaled output |
 | `help.py` | HelpMixin — About dialog, issue log |
-| `main.py` | MainWindow + main() entry point |
+| `main.py` | MainWindow + main() entry point; hosts `url_edit`, `label_edit`, `caption_check`, `print_scale_spin` |
+
+### UI Input Fields (on MainWindow)
+
+| Attribute | Widget | Purpose |
+|-----------|--------|---------|
+| `url_edit` | `QLineEdit` | URL or text to encode |
+| `label_edit` | `QLineEdit` | Optional short label printed above the URL in the caption |
+| `caption_check` | `QCheckBox` | Toggles caption rendering on/off |
+| `print_scale_spin` | `QSpinBox` | Print scale 10–100% (step 5%); persisted via `QSettings("print/scale")` |
 
 ### Shared Modules (external)
 - **Icon Manager Module** (`~/Projects/Icon_Manager_Module`) — icon loading, Windows taskbar AUMID
