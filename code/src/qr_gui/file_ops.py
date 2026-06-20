@@ -29,7 +29,11 @@ class FileOpsMixin:
             self.url_edit.setFocus()
             return
 
-        caption_lines = [text] if self.caption_check.isChecked() else None
+        if self.caption_check.isChecked():
+            label_text = self.label_edit.text().strip()
+            caption_lines = ([label_text] if label_text else []) + [text]
+        else:
+            caption_lines = None
         try:
             self.current_image = render_qr(text, caption_lines)
         except Exception as exc:  # pragma: no cover - defensive
@@ -90,6 +94,7 @@ class FileOpsMixin:
 
     def on_clear(self):
         self.url_edit.clear()
+        self.label_edit.clear()
         self.current_image = None
         self.base_pixmap = None
         self.last_saved_path = None

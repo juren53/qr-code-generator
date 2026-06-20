@@ -111,6 +111,15 @@ class MainWindow(MenuMixin, FileOpsMixin, ViewMixin, PrintMixin, HelpMixin, QMai
         form_row.addWidget(self.generate_btn)
         layout.addLayout(form_row)
 
+        # Label row
+        label_row = QHBoxLayout()
+        label_row.addWidget(QLabel("Label:      "))
+        self.label_edit = QLineEdit()
+        self.label_edit.setPlaceholderText("Short description printed above the URL (optional)")
+        self.label_edit.returnPressed.connect(self.on_generate)
+        label_row.addWidget(self.label_edit, 1)
+        layout.addLayout(label_row)
+
         # Options row
         options_row = QHBoxLayout()
         self.caption_check = QCheckBox("Caption the code with the text below it")

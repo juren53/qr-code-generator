@@ -43,11 +43,13 @@ def render_qr(
     fill_color: str = "black",
     back_color: str = "white",
     font_size: int = 20,
+    secondary_font_size: int = 14,
 ) -> Image.Image:
     """Render *data* as a QR code and return a PIL RGB image.
 
     If *caption_lines* is provided, each line is drawn centered on a white
-    strip below the QR code (matching the original generate_qr.py layout).
+    strip below the QR code. The first line uses *font_size*; subsequent lines
+    use *secondary_font_size* so a short label can sit above a long URL.
     """
     qr = qrcode.QRCode(version=1, box_size=box_size, border=border)
     qr.add_data(data)
@@ -59,11 +61,14 @@ def render_qr(
     if not caption_lines:
         return qr_img
 
-    font = _load_caption_font(font_size)
+    fonts = [
+        _load_caption_font(font_size if i == 0 else secondary_font_size)
+        for i in range(len(caption_lines))
+    ]
 
     measure = ImageDraw.Draw(qr_img)
     line_metrics = []
-    for line in caption_lines:
+    for line, font in zip(caption_lines, fonts):
         bbox = measure.textbbox((0, 0), line, font=font)
         line_metrics.append((bbox[2] - bbox[0], bbox[3] - bbox[1]))
 
@@ -82,7 +87,7 @@ def render_qr(
 
     draw = ImageDraw.Draw(canvas)
     text_y = qr_img.height + margin
-    for line, (text_width, text_height) in zip(caption_lines, line_metrics):
+    for line, (text_width, text_height), font in zip(caption_lines, line_metrics, fonts):
         text_x = (canvas.width - text_width) // 2
         draw.text((text_x, text_y), line, fill=fill_color, font=font)
         text_y += text_height + line_spacing

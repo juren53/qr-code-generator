@@ -9,6 +9,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 > Correct format: `## QRG [X.Y.Z] - YYYY-MM-DD HHMM CDT`
 > Example: `## QRG [0.1.0] - 2026-06-19 0352 CDT`
 
+## QRG [0.2.3] - 2026-06-20 0915 CDT
+
+### Added
+
+- **Label field for printed output** — a new optional "Label" text field appears below the URL input in the GUI
+  - When captioning is enabled and a label is provided, the label prints centered below the QR code at full font size (20pt), with the URL printed below it at a reduced font size (14pt), making long URLs more likely to fit the printed output
+  - When no label is entered, behavior is unchanged: the URL caption renders at full size as before
+  - **Files Modified**: `code/src/qr_gui/main.py`, `code/src/qr_gui/file_ops.py`, `code/src/qr_gui/qr_core.py`
+
+---
+
 ## QRG [0.2.2] - 2026-06-19 1131 CDT
 
 ### Changed

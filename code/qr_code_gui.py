@@ -8,7 +8,7 @@
 # Enter a URL or any text, preview the rendered PNG on screen, save it as a
 # PNG, copy it to the clipboard, or print it via the system print services.
 #
-# Version : 0.2.2
+# Version : 0.2.3
 # Created : 2026-06-19 04:23 CDT
 # -----------------------------------------------------------------------------
 
