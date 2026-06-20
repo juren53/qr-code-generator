@@ -1,4 +1,4 @@
-# QR Code Module
+# QR Code Generator
 
 A standalone module that generates QR codes linking any physical object to an online record — used here to connect museum artifacts to their digital records, but applicable to any setting where a scannable code should point people to more information.
 
