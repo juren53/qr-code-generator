@@ -1,0 +1,13 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=QR Code Generator
+GenericName=QR Code Generator
+Comment=Generate QR codes from a URL or any text string
+Exec=/home/juren/Projects/qr-code-generator/run.sh %u
+Icon=/home/juren/Projects/qr-code-generator/code/resources/icons/app_256x256.png
+Terminal=false
+Categories=Utility;
+Keywords=qr;qrcode;barcode;url;
+StartupNotify=true
+StartupWMClass=QRCodeGenerator
