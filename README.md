@@ -1,6 +1,8 @@
 # QR Code Generator
 
-A standalone module that generates QR codes linking any physical object to an online record — used here to connect museum artifacts to their digital records, but applicable to any setting where a scannable code should point people to more information.
+QR Code Generator is a PyQt6 desktop application for generating QR codes from a URL or any text string. It renders a preview of the QR PNG on screen and supports save, clipboard copy, and print via system print services. An optional caption can be drawn below the code.
+
+A standalone CLI tool (`code/generate_qr.py`) and a legacy web-based version (`code/qr-code-generator-library.html`) also live in the repo.
 
 ---
 
