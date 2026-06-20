@@ -1,6 +1,6 @@
 # QR Code Generator
 
-QR Code Generator is a PyQt6 desktop application for generating QR codes from a URL or any text string. It renders a preview of the QR PNG on screen and supports save, clipboard copy, and print via system print services. An optional caption can be drawn below the code.
+QR Code Generator is a PyQt6 desktop application for generating QR codes from a URL or any text string. It renders a preview of the QR PNG on screen and supports save, clipboard copy, and print via system print services. An optional caption prints a short label centered below the code and the URL below that in a smaller font. Print output can be scaled from 10–100% of the page.
 
 A standalone CLI tool (`code/generate_qr.py`) and a legacy web-based version (`code/qr-code-generator-library.html`) also live in the repo.
 
@@ -115,6 +115,12 @@ If you omit the filename, it defaults to `qrcode_example.png`; a `.png` extensio
 
 A GUI front-end lives at `code/qr_code_gui.py`. Enter a URL or any text, press **Generate**, and the rendered PNG is shown on screen for review. It offers standard **File / Edit / View / Help** menus, saves to PNG, copies to the clipboard, and **prints to any system printer** (with print preview).
 
+Key options in the interface:
+
+- **Label** — an optional short description (e.g. artifact name) printed centered below the QR code at full font size, with the URL below it in a smaller font so long URLs are less likely to overflow the printed output.
+- **Caption the code with the text below it** — toggle to include or suppress the caption entirely.
+- **Print scale** — a 10–100% spin box (step 5%) that controls how large the QR code is printed relative to the page. The output is always centered and aspect-ratio-preserving. The value persists across sessions.
+
 **Additional requirement:** PyQt6.
 
 ```bash
@@ -134,8 +140,8 @@ The GUI optionally uses two shared modules when present — [`pyqt-app-info`](ht
 
 ## Status
 
-Prototype complete. Two front-ends are available: a command-line generator (`code/generate_qr.py`) that prompts for a URL and output filename, and a PyQt6 GUI (`code/qr_code_gui.py`) that previews the rendered PNG on screen and prints it to system print services via standard File / Edit / View / Help menus. Both share a common rendering core. Lots to talk about and plan before full implementation — it is very doable.
+Prototype complete. Two front-ends are available: a command-line generator (`code/generate_qr.py`) that prompts for a URL and output filename, and a PyQt6 GUI (`code/qr_code_gui.py`) that previews the rendered PNG on screen, supports an optional label + URL two-line caption with separate font sizes, and prints to system print services with a configurable scale (10–100%). Both share a common rendering core. Lots to talk about and plan before full implementation — it is very doable.
 
 ---
 
-*Last updated: 2026-06-20-0851*
+*Last updated: 2026-06-20-1211*
