@@ -9,8 +9,8 @@
 
 APP_NAME = "QR Code Generator"
 APP_SHORT_NAME = "QRG"
-APP_VERSION = "0.2.3"
-APP_TIMESTAMP = "2026-06-20 0915"
+APP_VERSION = "0.2.4"
+APP_TIMESTAMP = "2026-06-20 1211"
 APP_ORGANIZATION = "SynchroSoft"
 APP_DESCRIPTION = (
     "Generate a QR code from a URL or any text, preview the rendered PNG "

@@ -9,6 +9,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 > Correct format: `## QRG [X.Y.Z] - YYYY-MM-DD HHMM CDT`
 > Example: `## QRG [0.1.0] - 2026-06-19 0352 CDT`
 
+## QRG [0.2.4] - 2026-06-20 1211 CDT
+
+### Added
+
+- **Print scale control** — a "Print scale" spin box (10–100%, step 5%) in the options row lets the user shrink the printed QR code below full-page size
+  - Defaults to 100% (existing full-page behavior); value persists across sessions via `QSettings`
+  - Output is centered on the page at the chosen scale; aspect ratio is always preserved
+  - **Files Modified**: `code/src/qr_gui/main.py`, `code/src/qr_gui/printing.py`
+
+---
+
 ## QRG [0.2.3] - 2026-06-20 0915 CDT
 
 ### Added

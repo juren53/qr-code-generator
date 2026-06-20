@@ -27,6 +27,7 @@ from PyQt6.QtWidgets import (
     QMainWindow,
     QPushButton,
     QScrollArea,
+    QSpinBox,
     QStatusBar,
     QVBoxLayout,
     QWidget,
@@ -126,6 +127,16 @@ class MainWindow(MenuMixin, FileOpsMixin, ViewMixin, PrintMixin, HelpMixin, QMai
         self.caption_check.setChecked(True)
         options_row.addWidget(self.caption_check)
         options_row.addStretch(1)
+        options_row.addWidget(QLabel("Print scale:"))
+        self.print_scale_spin = QSpinBox()
+        self.print_scale_spin.setRange(10, 100)
+        self.print_scale_spin.setSingleStep(5)
+        self.print_scale_spin.setSuffix("%")
+        self.print_scale_spin.setValue(int(QSettings().value("print/scale", 100)))
+        self.print_scale_spin.valueChanged.connect(
+            lambda v: QSettings().setValue("print/scale", v)
+        )
+        options_row.addWidget(self.print_scale_spin)
         layout.addLayout(options_row)
 
         # Preview area

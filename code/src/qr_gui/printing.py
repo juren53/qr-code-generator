@@ -19,12 +19,14 @@ class PrintMixin:
         painter = QPainter(printer)
         try:
             page = painter.viewport()
-            scaled = self.base_pixmap.size()
-            scaled.scale(page.size(), Qt.AspectRatioMode.KeepAspectRatio)
-            x = page.x() + (page.width() - scaled.width()) // 2
-            y = page.y() + (page.height() - scaled.height()) // 2
-            target = QRect(x, y, scaled.width(), scaled.height())
-            painter.drawPixmap(target, self.base_pixmap)
+            scale_factor = self.print_scale_spin.value() / 100.0
+            full = self.base_pixmap.size()
+            full.scale(page.size(), Qt.AspectRatioMode.KeepAspectRatio)
+            w = int(full.width() * scale_factor)
+            h = int(full.height() * scale_factor)
+            x = page.x() + (page.width() - w) // 2
+            y = page.y() + (page.height() - h) // 2
+            painter.drawPixmap(QRect(x, y, w, h), self.base_pixmap)
         finally:
             painter.end()
 
