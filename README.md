@@ -142,7 +142,7 @@ The GUI optionally uses two shared modules when present — [`pyqt-app-info`](ht
 
 ## Status
 
-Prototype complete. Two front-ends are available: a command-line generator (`code/generate_qr.py`) that prompts for a URL and output filename, and a PyQt6 GUI (`code/qr_code_gui.py`) that previews the rendered PNG on screen, supports an optional label + URL two-line caption with separate font sizes, and prints to system print services with a configurable scale (10–100%). Both share a common rendering core. Lots to talk about and plan before full implementation — it is very doable.
+Prototype complete. Two front-ends are available: a command-line generator (`code/generate_qr.py`) that prompts for a URL and output filename, and a PyQt6 GUI (`code/qr_code_gui.py`) that previews the rendered PNG on screen, supports an optional label + URL two-line caption with separate font sizes, and prints to system print services with a configurable scale (10–100%). Both share a common rendering core.
 
 ---
 
