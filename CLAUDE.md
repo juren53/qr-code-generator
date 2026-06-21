@@ -8,6 +8,8 @@ QR Code Generator is a PyQt6 desktop application for generating QR codes from a 
 
 A standalone CLI tool (`code/generate_qr.py`) and a legacy web-based version (`code/qr-code-generator-library.html`) also live in the repo.
 
+![QR Code Generator screenshot](images/Screenshot%20QR%20code%20app%20from%202026-06-20%2020-58-41.png)
+
 ## Development Commands
 
 ### Running the Application
