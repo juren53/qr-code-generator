@@ -115,6 +115,8 @@ If you omit the filename, it defaults to `qrcode_example.png`; a `.png` extensio
 
 A GUI front-end lives at `code/qr_code_gui.py`. Enter a URL or any text, press **Generate**, and the rendered PNG is shown on screen for review. It offers standard **File / Edit / View / Help** menus, saves to PNG, copies to the clipboard, and **prints to any system printer** (with print preview).
 
+<img src="images/Screenshot QR code app from 2026-06-20 20-58-41.png" width="400">
+
 Key options in the interface:
 
 - **Label** — an optional short description (e.g. artifact name) printed centered below the QR code at full font size, with the URL below it in a smaller font so long URLs are less likely to overflow the printed output.
@@ -144,4 +146,4 @@ Prototype complete. Two front-ends are available: a command-line generator (`cod
 
 ---
 
-*Last updated: 2026-06-20-1211*
+*Last updated: 2026-06-20-2100*
